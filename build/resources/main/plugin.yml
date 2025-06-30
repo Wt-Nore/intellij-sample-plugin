@@ -1,0 +1,6 @@
+name: Sample2
+version: '1.0-SNAPSHOT'
+main: plugin.sample2.Main
+api-version: '1.21'
+authors: [ 署名 ]
+description: 公開するときは、英語で書くこと
