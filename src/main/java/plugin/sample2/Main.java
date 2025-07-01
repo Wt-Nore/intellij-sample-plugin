@@ -202,3 +202,4 @@ public final class Main extends JavaPlugin implements Listener {
   }
 
 }
+//GitHub　学習コメント
