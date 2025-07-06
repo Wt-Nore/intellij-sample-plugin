@@ -17,10 +17,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,6 +38,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+//import org.bukkit.event.weather.LightningStrikeEvent;
 
 
 public final class Main extends JavaPlugin implements Listener {
@@ -43,11 +48,18 @@ public final class Main extends JavaPlugin implements Listener {
   @Override
   public void onEnable() {
     Bukkit.getPluginManager().registerEvents(this, this);
-  }
 
-  String mailed = "info@raise-tecg.net";
-  hoge@gmail.com
-  alpha_info@yahoocojp
+    //中級編　Day２コマンドの作成
+    //spigotサーバー用のコマンドもある。　コマンドをコードで作ることもできる
+    //コマンドを作った時に、そのコマンドを実行する専用のクラスを作る必要がある。
+      getCommand("LevelChange").setExecutor(new LevelChangeCommand() {
+        @Override
+        public boolean onCommand(CommandSender sender, Command command, String label,
+            String[] args) {
+          return super.onCommand(sender, command, label, args);
+        }
+      });
+    }
 
 
   /**
@@ -56,6 +68,7 @@ public final class Main extends JavaPlugin implements Listener {
    * @param e イベント
    */
 
+   //「無名クラスがプレビュー機能であり、デフォルトで無効」となってしまう
   //しゃがんだ時に花火を打ち上げる
   @EventHandler
   public void onPlayerToggleSneak(PlayerToggleSneakEvent e) throws IOException {
@@ -106,19 +119,39 @@ public final class Main extends JavaPlugin implements Listener {
         }
 
         player.sendMessage("花火を" + Flying_distance + "m発射します");
+        //sendMessage = マイクラ内のメッセージ
         System.out.println("花火の飛距離は" + Flying_distance + "mです");
+        //println = ターミナル上のメッセージ
         fireworkMeta.setPower(Flying_distance);
 
         // 追加した情報で再設定する。
         firework.setFireworkMeta(fireworkMeta);
       }
+      /*
       //変数pathの中にtxtファイルを作成する、
       Path path = Path.of("firework.txt");
       Files.writeString(path,"たーまやー");
-      player.sendMessage(Files.readString(path));
+      */
     }
   }
 
+  //中級編　Day１イベントの理解
+  //プレイヤーがログインした時に、イベント雷が鳴り、メッセージを表示
+  //LightningStrikeEvent_org.bukkit.event.weather
+
+  @EventHandler
+  public void onPlayerJoin(PlayerJoinEvent login_the_lightning) {
+   Player player = login_the_lightning.getPlayer();
+    World world = player.getWorld();
+    Location loclight = player.getLocation();
+    String playerName = player.getName(); //playerNameに、getNameによりプレイヤー名を取得
+
+    //↑プレイヤーがログインした時に
+    // 雷を落とす
+    world.strikeLightning(loclight);
+    //メッセージを送る
+    player.sendMessage("雷鳴と共に" + playerName + "が現れました");
+  }
 
   /*
   @EventHandler
@@ -200,7 +233,6 @@ public final class Main extends JavaPlugin implements Listener {
     }
     player.getInventory().setContents(itemStacks);
   }
-
 }
 //GitHub　学習コメント
 //学習コメント２つ目
