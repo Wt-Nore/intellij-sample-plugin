@@ -43,10 +43,16 @@ java {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+   // options.compilerArgs += '--enable-preview'  //無名クラスを有効にする
 
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
     }
+}
+
+test {
+    useJUnitPlatform()
+   // jvmArgs '--enable-preview'  // テスト実行時にもプレビュー機能を有効にする
 }
 
 processResources {
